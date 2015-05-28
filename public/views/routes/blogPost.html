@@ -1,0 +1,15 @@
+<div class="container" ng-controller="IndexController">
+    <form>
+        <div class="row">
+            <label for="title">Title:</label>
+            <input ng-model="bPost.title" type="text" name="title" id="title"/>
+        </div>
+        <div class="row">
+            <label for="textarea">New Post Content:</label>
+            <textarea ng-model="bPost.content" type="textarea" name="textarea" id="textarea"></textarea>
+        </div>
+        <div class="row">
+            <input type="submit" ng-click="add(bPost)" id="submit" addvalue="Submit"/>
+        </div>
+    </form>
+</div>

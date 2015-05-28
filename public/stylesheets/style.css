@@ -1,0 +1,34 @@
+body {
+    background-color: #222222;
+    color: #fff;
+}
+
+main {
+    margin: 5px 20px;
+}
+
+.navbar {
+    background-color: #4e4e4e;
+    margin-bottom: 0;
+}
+
+ul {
+    padding-top: .4%;
+}
+
+.nav li a:focus {
+    background-color: #4e4e4e;
+}
+
+.nav li a:hover{
+    background-color: #5c5c5c;
+    text-decoration: underline;
+}
+
+a:hover, a:focus {
+    color: #337ab7;
+}
+.jumbotron {
+    margin-top: 51px;
+    margin-bottom: 0;
+}

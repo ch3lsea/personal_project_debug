@@ -1,0 +1,6 @@
+<h1>Blog</h1>
+<div ng-repeat="bPost in posts | orderBy: '-date'" class="display col-md-4">
+    <h3>{{bPost.title}}</h3>
+    <p>{{bPost.content}}</p>
+    <p>{{bPost.date}}</p>
+</div>
