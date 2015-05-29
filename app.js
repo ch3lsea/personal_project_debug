@@ -5,11 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var passport = require('passport');
+
 var mongoose = require('mongoose');
 var schema = require('./models/schema');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var posts = require('./routes/posts');
 
 var app = express();
 
@@ -19,20 +21,68 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/schema', users);
+app.use('/posts', posts);
 
+//===========================================================
+//MongoDB Set-up
+var mongoURI = "mongodb://localhost:27017/personal_project";
+var MongoDB = mongoose.connect(mongoURI).connection;
+
+MongoDB.on('error', function (err) {
+  console.log('mongodb connection error', err);
+});
+
+MongoDB.once('open', function () {
+  console.log('mongodb connection open');
+});
+//===========================================================
+
+//===========================================================
+//Passport set up
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err,user){
+    if(err) done(err);
+    done(null,user);
+  });
+});
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+      if (username === "admin" && password === "Chadr7FR**")
+        return done(null, {name: "admin"});
+
+      return done(null, false, { message: 'Incorrect username.' });
+    }
+));
+
+var auth = function(req, res, next){
+  if (!req.isAuthenticated())
+    res.send(401);
+  else
+    next();
+};
+//===========================================================
+
+//===========================================================
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
+//===========================================================
 
+//===========================================================
 // error handlers
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -48,6 +98,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   next(err);
 });
-
+//===========================================================
 
 module.exports = app;

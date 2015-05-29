@@ -4,7 +4,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var Schema = require('../models/schema');
 
-/* GET users listing. */
+/* GET posts listing. */
 router.get('/', function(req, res, next) {
   Schema.find(function(err, posts) {
     res.json(posts);
@@ -14,6 +14,7 @@ router.get('/', function(req, res, next) {
 
 router.post("/", function(req,res,next){
   console.log("The post function works...? " + req.body);
+  //check auth
   Schema.create(req.body, function(err, bPost){
     res.json(bPost);
     console.log(bPost);

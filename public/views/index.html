@@ -4,21 +4,22 @@
         <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="/stylesheets/style.css">
     </head>
-    <body>
+    <body ng-controller="IndexController">
         <div class="navbar navbar-fixed-top">
             <div class="container-fluid">
                 <ul class="nav nav-pills">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#blog">Blog</a></li>
-                    <li><a href="#blogPost">Create New Post</a></li>
+                    <li ng-show="auth"><a href="#blogPost">Create New Post</a></li>
+                    <li class="lastC"><a href="">Log In</a></li>
                 </ul>
             </div>
         </div>
-        <div class="jumbotron"></div>
         <main ng-view></main>
         <!--Scripts-->
         <script type="text/javascript" src="/vendor/angular/angular.min.js"></script>
         <script type="text/javascript" src="/vendor/angular-route/angular-route.min.js"></script>
+
         <script type="text/javascript" src="/javascripts/app.min.js"></script>
         <!--Scripts-->
     </body>
