@@ -6,12 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
 
 var mongoose = require('mongoose');
 var schema = require('./models/schema');
 
 var routes = require('./routes/index');
 var posts = require('./routes/posts');
+var login = require('./routes/login'); //Do I need something like this?
 
 var app = express();
 
@@ -25,8 +28,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(
+    function(req,res,next) {
+      if (!req.isAuthenticated())
+        next();
+      else
+        express.static(path.join(__dirname, 'private'));
+    }
+);
+
 app.use('/', routes);
 app.use('/posts', posts);
+app.use('/login', login);
 
 //===========================================================
 //MongoDB Set-up
@@ -40,7 +53,6 @@ MongoDB.on('error', function (err) {
 MongoDB.once('open', function () {
   console.log('mongodb connection open');
 });
-//===========================================================
 
 //===========================================================
 //Passport set up
@@ -55,7 +67,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-passport.use(new LocalStrategy(
+passport.use('local',new LocalStrategy(
     function(username, password, done) {
       if (username === "admin" && password === "Chadr7FR**")
         return done(null, {name: "admin"});
@@ -64,14 +76,6 @@ passport.use(new LocalStrategy(
     }
 ));
 
-var auth = function(req, res, next){
-  if (!req.isAuthenticated())
-    res.send(401);
-  else
-    next();
-};
-//===========================================================
-
 //===========================================================
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -79,8 +83,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-//===========================================================
-
 //===========================================================
 // error handlers
 // development error handler

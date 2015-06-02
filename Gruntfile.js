@@ -5,9 +5,12 @@ module.exports = function(grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
-            build: {
-                src: 'client//scripts/app.js',
-                dest: 'public/javascripts/app.min.js'
+            files: {
+                src: 'client/scripts/**/*.js',  // source files mask
+                dest: 'public/javascripts/',    // destination folder
+                expand: true,    // allow dynamic building
+                flatten: true,   // remove all unnecessary nesting
+                ext: '.min.js'   // replace .js to .min.js
             }
         },
         copy: {
@@ -17,7 +20,7 @@ module.exports = function(grunt) {
                 src: [
                     "angular/angular.min.js",
                     "angular/angular.min.js.map",
-                    "angular/angular-csp.css",
+                    "angular/angular-csp.css"
                 ],
                 dest: "public/vendor/"
             },
