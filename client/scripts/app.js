@@ -1,29 +1,10 @@
+
+
 var app = angular.module('app',["ngRoute", "ngResource"]);
 
 app.config(['$routeProvider', '$httpProvider',
     function($routeProvider, $httpProvider) {
 
-    var checkLoggedin = ['$q', '$http', '$location', '$rootScope', function($q, $http, $location, $rootScope){
-        // Initialize a new promise
-        var deferred = $q.defer();
-
-        // Make an AJAX call to check if the user is logged in
-        $http.get('/login/loggedin').success(function(user){
-            // Authenticated
-            if (user !== '0') {
-                $scope.auth = true;
-                deferred.resolve();
-            }
-            // Not Authenticated
-            else {
-                $rootScope.message = 'You need to log in.';
-                deferred.reject();
-                $location.url('/login');
-            }
-        });
-
-        return deferred.promise;
-    }];
 
     $httpProvider.interceptors.push([ '$q', '$location',function($q, $location) {
         return {
@@ -47,21 +28,63 @@ app.config(['$routeProvider', '$httpProvider',
             templateUrl: "/views/routes/blog.html"
         }).
         when('/blogPost', {
-            templateUrl: "../views/routes/blogPost.html",
-            resolve: {
-                loggedin: checkLoggedin
-            }
+            templateUrl: "../views/routes/blogPost.html"
         }).
         when('/login', {
             templateUrl: "/views/routes/login.html",
-            controller: "LoginCtrl"
+            controller: "LoginCtrl",
+            resolve: {
+                loggedin: checkLoggedin
+            }
         }).
         otherwise({
             redirectTo: "/home"
         });
 }]);
+//
+////My fix attempt: same error as Joe's, but also has $rootScope not defined error
+////$rootScope.Scope(['$rootScope', '$http', function($rootScope, $http){
+////    var checkLoggedin = function() {
+////        // Make an AJAX call to check if the user is logged in
+////        $http.get('/login/loggedin').success(function (user) {
+////            // Authenticated
+////            if (user !== '0') {
+////                console.log('Authenticated');
+////                return true;
+////            }
+////            // Not Authenticated
+////            else {
+////                console.log('Not Authenticated');
+////                return false;
+////            }
+////        });
+////    };
+////    checkLoggedin();
+////}]);
+//
+////Joe's fix attempt: runs into checkLoggedin not defined error...?
+app.run(['$rootScope', '$http', function($rootScope, $http){
 
-app.controller("IndexController", ['$scope', '$http', function($scope, $http){
+    $rootScope.checkLoggedin = function(){
+        console.log("rootScope things are happening");
+        // Make an AJAX call to check if the user is logged in
+        //$http.get('/login/loggedin').success(function(user){
+        //    // Authenticated
+        //    if (user !== '0') {
+        //        console.log('Authenticated');
+        //        return true;
+        //    }
+        //    // Not Authenticated
+        //    else {
+        //        console.log('Not Authenticated');
+        //        return false;
+        //    }
+        //});
+    };
+
+}]);
+//
+app.controller("NavController", ['$scope', '$http', function($scope, $http){
     //$scope.bPost = {};
     //$scope.posts = [];
     //var fetchPosts = function() {
@@ -86,5 +109,7 @@ app.controller("IndexController", ['$scope', '$http', function($scope, $http){
     //    }
     //};
     console.log('index controller is working');
+    //$rootScope.checkLoggedin();
+    //add a watch to it anytime it runs...?
 
 }]);
