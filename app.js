@@ -14,7 +14,7 @@ var schema = require('./models/schema');
 
 var routes = require('./routes/index');
 var posts = require('./routes/posts');
-var login = require('./routes/login'); //Do I need something like this?
+var login = require('./routes/login');
 
 var app = express();
 
@@ -57,7 +57,7 @@ MongoDB.once('open', function () {
 //===========================================================
 //Passport set up
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+  done(null, user.name);
 });
 
 passport.deserializeUser(function(id, done) {
@@ -79,6 +79,7 @@ passport.use('local',new LocalStrategy(
 //===========================================================
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log('404:', req.url);
   var err = new Error('Not Found');
   err.status = 404;
   next(err);

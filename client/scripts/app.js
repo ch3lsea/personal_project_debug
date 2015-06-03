@@ -44,13 +44,10 @@ app.config(['$routeProvider', '$httpProvider',
             templateUrl: "/views/routes/home.html"
         }).
         when('/blog', {
-            templateUrl: "/views/routes/blog.html",
-            resolve: {
-                loggedin: checkLoggedin
-            }
+            templateUrl: "/views/routes/blog.html"
         }).
         when('/blogPost', {
-            templateUrl: "/views/routes/blogPost.html",
+            templateUrl: "../views/routes/blogPost.html",
             resolve: {
                 loggedin: checkLoggedin
             }

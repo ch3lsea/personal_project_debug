@@ -5,7 +5,7 @@ app.controller('LoginCtrl',['$scope','$rootScope','$http','$location' ,function(
 
     // Register the login() function
     $scope.login = function(){
-        $http.post('/', {
+        $http.post('/login', {
             username: $scope.username,
             password: $scope.password
         })
@@ -17,7 +17,7 @@ app.controller('LoginCtrl',['$scope','$rootScope','$http','$location' ,function(
             .error(function(){
                 // Error: authentication failed
                 $rootScope.message = 'Authentication failed.';
-                $location.url('/');
+                $location.url('/home');
             });
     };
 }]);
